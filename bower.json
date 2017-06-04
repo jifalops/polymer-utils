@@ -1,7 +1,9 @@
 {
   "name": "polymer-utils",
   "description": "Polymer utility functions and mixins.",
-  "main": "polymer-utils.html",
+  "authors": [ "Jacob Phillips (https://github.com/jifalops)"],
+  "main": ["polymer-utils.html", "polymer-utils-base.html"],
+  "license": "MIT",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0"
   },
