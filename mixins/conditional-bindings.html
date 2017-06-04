@@ -1,0 +1,13 @@
+<script>
+  /**
+   * Mixin to have a Polymer computed binding be one of two values.
+   */
+  ConditionalBindings = function(superClass) {
+    return class extends superClass {
+      /**
+       * Implement a conditional statement for use in Polymer computed bindings.
+       */
+      _if(cond, t, f) { return cond ? t : f; }
+    }
+  }
+</script>

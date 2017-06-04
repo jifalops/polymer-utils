@@ -1,0 +1,75 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/render-status.html">
+<link rel="import" href="../polymer/lib/utils/debounce.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
+<dom-module id="XX">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+  </template>
+
+  <script>
+    class XX extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'XX'; }
+      static get properties() {
+        return {
+
+        };
+      }
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        // Polymer.RenderStatus.afterNextRender(this, this._addListeners;
+        // Polymer.RenderStatus.afterNextRender(this, () => { this._addListeners(); });
+      }
+
+      disconnectedCallback() {
+        // this._removeListeners();
+      }
+
+      _addListeners() {
+        // this._boundListener = this.someFunction.bind(this);
+        // this._boundListener = () => {}
+        // window.addEventListener('eventname', this._boundListener);
+      }
+      _removeListeners() {
+        // window.removeEventListener('eventname', this._boundListener);
+      }
+
+      _toggle(cond, t, f) { return cond ? t : f; }
+
+      /**
+       * If delay is < 0, microtask timing will be used (via a mutation observer).
+       * If delay is >= 0, a timeout is used (new browser task).
+       */
+      _debounce(debouncer, delay, callback) {
+        return Polymer.Debouncer.debounce(
+          debouncer,
+          delay >= 0 ? Polymer.Async.timeOut.after(delay) : Polymer.Async.microTask,
+          callback
+        );
+      }
+      /** Copy the Polymer 1.x fire implementation. */
+      _fire(name, data, options = {}) {
+        options.detail = data;
+        if (options.bubbles === undefined) options.bubbles = true;
+        if (options.composed === undefined) options.composed = true;
+        this.dispatchEvent(new CustomEvent(name, options));
+      }
+      /**
+       * Fired when
+       * @event name
+       * @param {type} name Description
+       */
+    }
+    customElements.define(XX.is, XX);
+  </script>
+</dom-module>

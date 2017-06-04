@@ -1,0 +1,15 @@
+<script>
+  /**
+   * Mixin for
+   */
+  MyMixin = function(superClass) {
+    return class extends superClass {
+      connectedCallback() {
+        super.connectedCallback && super.connectedCallback();
+      }
+      disconnectedCallback() {
+        super.disconnectedCallback && super.disconnectedCallback();
+      }
+    }
+  }
+</script>

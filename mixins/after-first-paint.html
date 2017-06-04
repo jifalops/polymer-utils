@@ -1,0 +1,46 @@
+<link rel="import" href="../polymer/lib/utils/render-status.html">
+<script>
+  /**
+   * Mixin for running code after the first paint whenever the element is
+   * attached/connected to the DOM.
+   *
+   * It also provides two convenience methods: `_addListeners` and `_removeListeners`.
+   */
+  AfterFirstPaint = function(superClass) {
+    return class extends superClass {
+      connectedCallback() {
+        super.connectedCallback && super.connectedCallback();
+        Polymer.RenderStatus.afterNextRender(this, this._afterFirstPaint);
+      }
+      disconnectedCallback() {
+        super.disconnectedCallback && super.disconnectedCallback();
+        this._removeListeners();
+      }
+      /**
+       * Called after the first paint whenever the element is attached/connected
+       * to the DOM. If an `_addListeners` method is defined, it will be called.
+       *
+       * If only adding listeners, simply implement the `_addListeners` and
+       * `_removeListeners` methods, for more after-paint operations, override
+       * this method and call super().
+       */
+      _afterFirstPaint() {
+        if (this.__listenersAdded) {
+          console.warn('Adding listeners before first paint can impact user experience. ')
+        } else {
+          this._addListeners();
+        }
+      }
+      _addListeners() {
+        this.__listenersAdded = true;
+        // this._boundListener = this.someFunction.bind(this);
+        // this._boundListener = () => {}
+        // window.addEventListener('eventname', this._boundListener);
+      }
+      _removeListeners() {
+        this.__listenersAdded = false;
+        // window.removeEventListener('eventname', this._boundListener);
+      }
+    }
+  }
+</script>
