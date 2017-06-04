@@ -21,7 +21,7 @@
      * but included for completeness.
      * @return {Function} To cancel the scheduled function.
      */
-    static settimeout(fn, delay) {
+    static timeout(fn, delay) {
       let async = delay === undefined
         ? Polymer.Async.timeout
         : Polymer.Async.timeout.after(delay);

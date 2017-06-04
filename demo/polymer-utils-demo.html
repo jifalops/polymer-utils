@@ -1,0 +1,127 @@
+<link rel="import" href="../polymer-utils-base.html">
+<link rel="import" href="../polymer-utils.html">
+
+<dom-module id="polymer-utils-demo">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h3>PolymerUtilsDemo</h3>
+    <template is="dom-repeat" items="[[log]]">
+      <div>[[item]]</div>
+    </template>
+  </template>
+
+  <script>
+    class PolymerUtilsDemo extends PolymerUtilsBase {
+      static get is() { return 'polymer-utils-demo'; }
+
+      clearLog() {
+        this.log = [];
+      }
+
+      clearTasks() {
+        this.tasks = [];
+      }
+
+      constructor() {
+        super();
+        this.log = [];
+        this.log.push('constructor');
+      }
+
+      connectedCallback() {
+        this.log.push('connectedCallback: before super()');
+        super.connectedCallback();
+        this.log.push('connectedCallback: after super()');
+      }
+
+      disconnectedCallback() {
+        this.log.push('disconnectedCallback: before super()');
+        super.disconnectedCallback();
+        this.log.push('disconnectedCallback: after super()');
+      }
+
+      _afterFirstPaint() {
+        this.log.push('_afterFirstPaint: before super()');
+        super.disconnectedCallback();
+        this.log.push('_afterFirstPaint: after super()');
+      }
+
+      _addListeners() {
+        this.log.push('_addListeners: before super()');
+        super._addListeners();
+        this.log.push('_addListeners: after super()');
+        // this._boundListener = this.someFunction.bind(this);
+        // this._boundListener = () => {}
+        // window.addEventListener('eventname', this._boundListener);
+      }
+      _removeListeners() {
+        this.log.push('_removeListeners: before super()');
+        super._removeListeners();
+        this.log.push('_removeListeners: after super()');
+        // window.removeEventListener('eventname', this._boundListener);
+      }
+
+      _if(cond, t, f) {
+        this.log.push('_if');
+        return super._if(cond, t, f);
+      }
+
+      _fire(name, data, options) {
+        this.log.push('_fire: before super()');
+        super._fire(name, data, options);
+        this.log.push('_fire: after super()');
+      }
+
+      /**
+       * Fired when
+       * @event name
+       * @param {type} name Description
+       */
+
+
+
+      _timeout(fn, delay) {
+        this.log.push('PolymerUtils.timeout');
+        return PolymerUtils.timeout(fn, delay);
+      }
+      _animationFrameBefore(fn) {
+        this.log.push('PolymerUtils.animationFrameBefore');
+        return PolymerUtils.animationFrameBefore(fn);
+      }
+      _animationFrameAfter(fn) {
+        this.log.push('PolymerUtils.animationFrameAfter');
+        return PolymerUtils.animationFrameAfter(fn);
+      }
+      _idlePeriod(fn) {
+        this.log.push('PolymerUtils.idlePeriod');
+        return PolymerUtils.idlePeriod(fn);
+      }
+      _microtask(fn) {
+        this.log.push('PolymerUtils.microtask');
+        return PolymerUtils.microtask(fn);
+      }
+
+      _debounce(debouncer, delay, callback) {
+        this.log.push('PolymerUtils.debounce');
+        return PolymerUtils.debounce(debouncer, delay, callback);
+      }
+      _debounceUntilRender(debouncer, callback) {
+        this.log.push('PolymerUtils.debounceUntilRender');
+        return PolymerUtils.debounceUntilRender(debouncer, callback);
+      }
+      _debounceUntilIdle(debouncer, callback) {
+        this.log.push('PolymerUtils.debounceUntilIdle');
+        return PolymerUtils.debounceUntilIdle(debouncer, callback);
+      }
+      _debounceMicrotask(debouncer, callback) {
+        this.log.push('PolymerUtils.debounceMicrotask');
+        return PolymerUtils.debounceMicrotask(debouncer, callback);
+      }
+    }
+    customElements.define(PolymerUtilsDemo.is, PolymerUtilsDemo);
+  </script>
+</dom-module>

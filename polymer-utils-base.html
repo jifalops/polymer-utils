@@ -10,5 +10,7 @@
    */
   class PolymerUtilsBase extends Polymer.GestureEventListeners(
       AfterFirstPaint(ConditionalBindings(CustomEvents(Polymer.Element)))) {
+    static get is() { return 'polymer-utils-base'; }
   }
+  customElements.define(PolymerUtilsBase.is, PolymerUtilsBase);
 </script>
