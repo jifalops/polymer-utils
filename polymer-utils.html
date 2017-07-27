@@ -29,6 +29,7 @@
     }
     /**
      * Run a function at `requestAnimationFrame` timing (before the next paint).
+     * If you don't need the returned function, consider using #beforeNextRender instead.
      * @return {Function} To cancel the scheduled function.
      */
     static animationFrameBefore(fn) {
@@ -36,6 +37,7 @@
     }
     /**
      * Run a function at `requestAnimationFrame` timing (after the next paint).
+     * If you don't need the returned function, consider using #afterNextRender instead.
      * @return {Function} Cancels the animation frame and subsequent timeout.
      */
     static animationFrameAfter(fn) {
@@ -65,12 +67,14 @@
     }
     /**
      * Convenience method for `Polymer.RenderStatus.beforeNextRender`. Not cancelable.
+     * Calls to this function are added to a queue which is cleared before the next render.
      */
     static beforeNextRender(context, callback, args) {
       Polymer.RenderStatus.beforeNextRender(context, callback, args);
     }
     /**
      * Convenience method for `Polymer.RenderStatus.afterNextRender`. Not cancelable.
+     * Calls to this function are added to a queue which is cleared after the next render.
      */
     static afterNextRender(context, callback, args) {
       Polymer.RenderStatus.afterNextRender(context, callback, args);

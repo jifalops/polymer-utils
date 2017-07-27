@@ -25,7 +25,7 @@
        * this method and call super().
        */
       _afterFirstPaint() {
-        if (this.__listenersAdded) {
+        if (this._listenersAdded()) {
           console.warn('Adding listeners before first paint can impact user experience. ')
         } else {
           this._addListeners();
@@ -40,6 +40,9 @@
       _removeListeners() {
         this.__listenersAdded = false;
         // window.removeEventListener('eventname', this._boundListener);
+      }
+      _listenersAdded() {
+        return this.__listenersAdded;
       }
     }
   }
