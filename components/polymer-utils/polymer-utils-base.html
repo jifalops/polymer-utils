@@ -1,0 +1,20 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="mixins/conditional-bindings.html">
+<link rel="import" href="mixins/polymer1-fire.html">
+<link rel="import" href="mixins/after-first-paint.html">
+
+<script>
+  /**
+   * Abstract base class that incorporates the bundled mixins.
+   *
+   * @customElement
+   * @polymer
+   * @demo demo/index.html
+   */
+  class PolymerUtilsBase extends Polymer.GestureEventListeners(
+      AfterFirstPaint(ConditionalBindings(Polymer1Fire(Polymer.Element)))) {
+    static get is() { return 'polymer-utils-base'; }
+  }
+  customElements.define(PolymerUtilsBase.is, PolymerUtilsBase);
+</script>

@@ -1,0 +1,122 @@
+<link rel="import" href="../polymer/lib/utils/async.html">
+<link rel="import" href="../polymer/lib/utils/render-status.html">
+<link rel="import" href="../polymer/lib/utils/debounce.html">
+
+<script>
+  /**
+   * A utility class for async and debounce operations.
+   */
+  class PolymerUtils {
+    constructor() {
+      console.warn('PolymerUtils is a utility class not meant to be instantiated.');
+    }
+
+
+    // Related to Polymer.Async
+
+
+    /**
+     * Runs a cancelable timeout. A bit more complex than handling natively,
+     * but included for completeness.
+     * @return {Function} To cancel the scheduled function.
+     */
+    static timeout(fn, delay) {
+      let runnable = delay === undefined
+        ? Polymer.Async.timeOut
+        : Polymer.Async.timeOut.after(delay);
+      return runnable.cancel.bind(runnable.run(fn));
+    }
+    /**
+     * Run a function at `requestAnimationFrame` timing (before the next paint).
+     * If you don't need the returned function, consider using #beforeNextRender instead.
+     * @return {Function} To cancel the scheduled function.
+     */
+    static animationFrameBefore(fn) {
+      return Polymer.Async.animationFrame.cancel.bind(Polymer.Async.animationFrame.run(fn));
+    }
+    /**
+     * Run a function at `requestAnimationFrame` timing (after the next paint).
+     * If you don't need the returned function, consider using #afterNextRender instead.
+     * @return {Function} Cancels the animation frame and subsequent timeout.
+     */
+    static animationFrameAfter(fn) {
+      var timeoutHandle;
+      let renderHandle = Polymer.Async.animationFrame.run(function() {
+        timeoutHandle = Polymer.Async.timeOut.run(fn);
+      });
+      return function() {
+        Polymer.Async.animationFrame.cancel(renderHandle);
+        timeoutHandle && Polymer.Async.timeOut.cancel(timeoutHandle);
+      };
+    }
+    /**
+      * Run a function at `requestIdleCallback` timing, or
+      * falls back to setTimeout 16ms if not supported.
+      * @return {Function} To cancel the scheduled function.
+      */
+    static idlePeriod(fn) {
+      return Polymer.Async.idlePeriod.cancel.bind(Polymer.Async.idlePeriod.run(fn));
+    }
+    /**
+      * Run a function at microTask timing (before the next task).
+      * @return {Function} To cancel the scheduled function.
+      */
+    static microTask(fn) {
+      return Polymer.Async.microTask.cancel.bind(Polymer.Async.microTask.run(fn));
+    }
+    /**
+     * Convenience method for `Polymer.RenderStatus.beforeNextRender`. Not cancelable.
+     * Calls to this function are added to a queue which is cleared before the next render.
+     */
+    static beforeNextRender(context, callback, args) {
+      Polymer.RenderStatus.beforeNextRender(context, callback, args);
+    }
+    /**
+     * Convenience method for `Polymer.RenderStatus.afterNextRender`. Not cancelable.
+     * Calls to this function are added to a queue which is cleared after the next render.
+     */
+    static afterNextRender(context, callback, args) {
+      Polymer.RenderStatus.afterNextRender(context, callback, args);
+    }
+
+
+    // Related to Polymer.Debouncer
+
+
+    /**
+     * Debounce a function for `delay` milliseconds.
+     * @return The `debouncer` passed as an argument, creating one if necessary.
+     * @see `Polymer.Debouncer.debounce`
+     */
+    static debounce(debouncer, delay, callback) {
+      return Polymer.Debouncer.debounce(debouncer,
+        delay > 0 ? Polymer.Async.timeOut.after(delay) : Polymer.Async.timeOut,
+        callback
+      );
+    }
+    /**
+     * Debounce a function at `requestAnimationFrame` timing, after the next render.
+     * @return The `debouncer` passed as an argument, creating one if necessary.
+     */
+    static debounceUntilRender(debouncer, callback) {
+      return Polymer.Debouncer.debounce(debouncer,
+        Polymer.Async.animationFrame,
+        function() { setTimeout(callback) }
+      );
+    }
+    /**
+     * Debounce a function at `requestIdleCallback` timing, or 16ms if unsupported.
+     * @return The `debouncer` passed as an argument, creating one if necessary.
+     */
+    static debounceUntilIdle(debouncer, callback) {
+      return Polymer.Debouncer.debounce(debouncer, Polymer.Async.idlePeriod, callback);
+    }
+    /**
+     * Debounce a function at microTask timing, using a MutationObserver queue.
+     * @return The `debouncer` passed as an argument, creating one if necessary.
+     */
+    static debounceMicroTask(debouncer, callback) {
+      return Polymer.Debouncer.debounce(debouncer, Polymer.Async.microTask, callback);
+    }
+  }
+</script>

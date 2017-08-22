@@ -1,0 +1,27 @@
+{
+  "name": "polymer-utils",
+  "description": "Polymer utility functions and mixins.",
+  "main": ["polymer-utils-base.html", "polymer-utils.html"],
+  "authors": ["Jacob Phillips (https://github.com/jifalops) <jifalops@gmail.com>"],
+  "license": "MIT",
+  "keywords": [
+    "polymer",
+    "utils",
+    "async",
+    "debounce",
+    "fire",
+    "listener",
+    "paint"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-demo-helpers": "^2.0.0",
+    "iron-component-page": "^2.0.0",
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "^1.0.0",
+    "iron-flex-layout": "iron-flex-layout#^2.0.0",
+    "shadycss": "shadycss#^1.0.0"
+  }
+}

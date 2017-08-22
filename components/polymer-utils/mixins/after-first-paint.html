@@ -1,0 +1,59 @@
+<link rel="import" href="../polymer/lib/utils/render-status.html">
+<script>
+  /**
+   * Mixin for running code after the first paint whenever the element is
+   * attached/connected to the DOM.
+   *
+   * It provides the following methods:
+   * * `_afterFirstPaint` Do any work that is not necessary before first paint.
+   * * `_addListeners` Called by `_afterFirstPaint`, convenience for common use case.
+   * * `_removeListeners` Called when the element is detached from the DOM.
+   */
+  AfterFirstPaint = function(superClass) {
+    return class extends superClass {
+      connectedCallback() {
+        super.connectedCallback && super.connectedCallback();
+        Polymer.RenderStatus.afterNextRender(this, this._afterFirstPaint);
+      }
+      disconnectedCallback() {
+        super.disconnectedCallback && super.disconnectedCallback();
+        this._removeListeners();
+      }
+      /**
+       * Called after the first paint whenever the element is attached/connected
+       * to the DOM.
+       *
+       * If only adding listeners, simply implement the `_addListeners` and
+       * `_removeListeners` methods, for more after-paint operations, override
+       * this method and call super().
+       */
+      _afterFirstPaint() {
+        if (this.__listenersAdded) {
+          console.warn('Adding listeners before first paint can impact user experience. ')
+        } else {
+          this._addListeners();
+        }
+      }
+      /**
+       * Called from `_afterFirstPaint`.
+       * Use this for calls to `window.addEventListener`.
+       */
+      _addListeners() {
+        this.__listenersAdded = true;
+      }
+      /**
+       * Called from `disconnectedCallback`.
+       * Use this for calls to `window.removeEventListener`.
+       */
+      _removeListeners() {
+        this.__listenersAdded = false;
+      }
+      /**
+       * Getter to check if listeners are currently added.
+       */
+      get _listenersAdded() {
+        return this.__listenersAdded;
+      }
+    }
+  }
+</script>

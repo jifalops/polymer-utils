@@ -1,0 +1,57 @@
+<link rel="import" href="polymer-utils-base.html">
+
+<dom-module id="XX">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div>[[_if(someprop, 'yes', 'no')]]</div>
+  </template>
+
+  <script>
+    class XX extends PolymerUtilsBase {
+      static get is() { return 'XX'; }
+      static get properties() {
+        return {
+
+        };
+      }
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+      }
+
+      _addListeners() {
+        super._addListeners();
+        // window.addEventListener('eventname', this.someFunction.bind(this));
+      }
+      _removeListeners() {
+        super._removeListeners();
+        // window.removeEventListener('eventname', this.someFunction.bind(this));
+      }
+
+      _afterFirstPaint() {
+        super._afterFirstPaint();
+        // _addListeners() just ran.
+        this.fire('first-paint'); // Polymer 1.x `fire(name, data, options)`
+      }
+
+      /**
+       * Fired after the first paint.
+       * @event first-paint
+       * @param {type} name Description
+       */
+    }
+    customElements.define(XX.is, XX);
+  </script>
+</dom-module>

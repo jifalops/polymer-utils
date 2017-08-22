@@ -1,0 +1,172 @@
+<link rel="import" href="../polymer-utils-base.html">
+<link rel="import" href="../polymer-utils.html">
+
+<dom-module id="polymer-utils-demo">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: block;
+      }
+      .row {
+        @apply --layout-horizontal;
+      }
+      .row * {
+        @apply --layout-flex;
+      }
+    </style>
+    <h3>PolymerUtils.* demo</h3>
+
+    <div class="row">
+      <b>Task queue</b>
+    </div>
+    <template is="dom-repeat" items="[[tasks]]">
+      <div>
+        [[index]]. [[item.name]]
+      </div>
+    </template>
+
+    <select id="select">
+      <option>timeout</option>
+      <option>animationFrameBefore</option>
+      <option>animationFrameAfter</option>
+      <option>idlePeriod</option>
+      <option>microTask</option>
+      <option>beforeNextRender</option>
+      <option>afterNextRender</option>
+      <option>debounce</option>
+      <option>debounceUntilRender</option>
+      <option>debounceUntilIdle</option>
+      <option>debounceMicroTask</option>
+    </select>
+    <button on-tap="_addSelected">Add Task</button>
+    <br/>
+    <button on-tap="run">Run Tasks</button>
+    <button on-tap="_clearTasks">Clear Queue</button>
+    <button on-tap="_resetTasks">Reset Queue</button>
+
+    <h4>Log</h4>
+    <div class="row">
+      <b>Elapsed</b>
+      <b>Function</b>
+      <b>Info</b>
+    </div>
+    <template is="dom-repeat" items="[[_log]]">
+      <div class="row">
+        <span>[[item.time]]</span>
+        <span>[[item.name]]</span>
+        <span>[[item.data]]</span>
+      </div>
+    </template>
+    <p>Timeouts are called with a delay of 0.</p>
+  </template>
+
+  <script>
+    class PolymerUtilsDemo extends PolymerUtilsBase {
+      static get is() { return 'polymer-utils-demo'; }
+
+      _addSelected(e) {
+        let task = this.$.select.options[this.$.select.selectedIndex].text;
+        if (task) this['_' + task]();
+      }
+      _clearTasks(e) {
+        this.tasks = [];
+      }
+      _resetTasks(e) {
+        this.tasks = [];
+        this._timeout();
+        this._animationFrameBefore();
+        this._animationFrameAfter();
+        this._idlePeriod();
+        this._microTask();
+        this._beforeNextRender();
+        this._afterNextRender();
+        this._debounce();
+        this._debounceUntilRender();
+        this._debounceUntilIdle();
+        this._debounceMicroTask();
+      }
+
+      constructor() {
+        super();
+        this._log = [];
+        this.tasks = [];
+        this._resetTasks();
+      }
+
+      ready() {
+        super.ready()
+        this.run()
+      }
+
+      _timeout(fn, delay) {
+        this.addTask('timeout', function(){});
+      }
+      _animationFrameBefore(fn) {
+        this.addTask('animationFrameBefore', function(){});
+      }
+      _animationFrameAfter(fn) {
+        this.addTask('animationFrameAfter', function(){});
+      }
+      _idlePeriod(fn) {
+        this.addTask('idlePeriod', function(){});
+      }
+      _microTask(fn) {
+        this.addTask('microTask', function(){});
+      }
+
+      _beforeNextRender(context, fn, args) {
+        this.addTask('beforeNextRender', this, function(){});
+      }
+      _afterNextRender(context, fn, args) {
+        this.addTask('afterNextRender', this, function(){});
+      }
+
+      _debounce(debouncer, delay, callback) {
+        this.addTask('debounce', null, 0, function(){});
+      }
+      _debounceUntilRender(debouncer, callback) {
+        this.addTask('debounceUntilRender', null, function(){});
+      }
+      _debounceUntilIdle(debouncer, callback) {
+        this.addTask('debounceUntilIdle', null, function(){});
+      }
+      _debounceMicroTask(debouncer, callback) {
+        this.addTask('debounceMicroTask', null, function(){});
+      }
+
+      log(name, data) {
+        this.push('_log', {time: this.time(), name, data});
+      }
+
+      time() {
+        if (!this.__time) {
+          this.__time = performance.now();
+          return 0;
+        }
+        let time = performance.now() - this.__time;
+        if (time < 1000) return (Math.round(time * 100) / 100) + ' ms';
+        else return (Math.round(time * 100) / 100000) + ' s';
+      }
+
+      addTask(name, ...args) {
+        for (let [i, arg] of args.entries()) {
+          if (typeof arg == 'function') {
+            args[i] = () => this.log(name, 'finished');
+          }
+        }
+        this.push('tasks', {name, args});
+      }
+
+      run() {
+        this._log = [];
+        this.__time = 0;
+        for (let task of this.tasks) {
+          this.log(task.name, 'calling...');
+          PolymerUtils[task.name](...task.args);
+          this.log(task.name, 'returned');
+        }
+      }
+    }
+    customElements.define(PolymerUtilsDemo.is, PolymerUtilsDemo);
+  </script>
+</dom-module>

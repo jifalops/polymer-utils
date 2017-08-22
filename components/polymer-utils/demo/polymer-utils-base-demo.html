@@ -1,0 +1,122 @@
+<link rel="import" href="../polymer-utils-base.html">
+<link rel="import" href="../polymer-utils.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../shadycss/apply-shim.html">
+
+<dom-module id="polymer-utils-base-demo">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: block;
+      }
+      .row {
+        @apply --layout-horizontal;
+      }
+      .row * {
+        @apply --layout-flex;
+      }
+    </style>
+    <h3>PolymerUtilsBase demo</h3>
+      <div class="row">
+        <b>Elapsed</b>
+        <b>Function</b>
+        <b>Info</b>
+      </div>
+      <template is="dom-repeat" items="[[_log]]">
+        <div class="row">
+          <span>[[item.time]]</span>
+          <span>[[item.name]]</span>
+          <span>[[item.data]]</span>
+        </div>
+      </template>
+
+    <p>Press any key.</p>
+    <div>[[_if(enterPressed, 'Enter pressed.', 'Enter not pressed.')]]</div>
+  </template>
+
+  <script>
+    class PolymerUtilsBaseDemo extends PolymerUtilsBase {
+      static get is() { return 'polymer-utils-base-demo'; }
+
+      constructor() {
+        super();
+        this._log = [];
+        this.log('constructor');
+
+        this._resizeListener = e => this.log('window resized');
+        this._keydownListener = e => {
+          this.log('keydown', e.key);
+          this.enterPressed = e.key == 'Enter';
+        };
+        this.enterPressed = false;
+      }
+
+      connectedCallback() {
+        this.log('connectedCallback', 'before super()');
+        super.connectedCallback();
+        this.log('connectedCallback', 'after super()');
+      }
+
+      disconnectedCallback() {
+        this.log('disconnectedCallback', 'before super()');
+        super.disconnectedCallback();
+        this.log('disconnectedCallback', 'after super()');
+      }
+
+      _afterFirstPaint() {
+        this.log('_afterFirstPaint', 'before super()');
+        super._afterFirstPaint();
+        this.log('_afterFirstPaint', 'after super()');
+        this.fire('first-paint');
+      }
+
+      _addListeners() {
+        this.log('_addListeners', 'before super()');
+        super._addListeners();
+        this.log('_addListeners', 'after super()');
+
+        window.addEventListener('keydown', this._keydownListener);
+        window.addEventListener('resize', this._resizeListener);
+      }
+      _removeListeners() {
+        this.log('_removeListeners', 'before super()');
+        super._removeListeners();
+        this.log('_removeListeners', 'after super()');
+
+        window.removeEventListener('keydown', this._keydownListener);
+        window.removeEventListener('resize', this._resizeListener);
+      }
+
+      _if(cond, t, f) {
+        this.log('_if', `enterPressed = ${cond}`);
+        return super._if(cond, t, f);
+      }
+
+      fire(name, data, options) {
+        this.log('fire', `${name}: before super()`);
+        super.fire(name, data, options);
+        this.log('fire', `${name}: after super()`);
+      }
+
+      log(name, data) {
+        this.push('_log', {time: this.time(), name, data});
+      }
+
+      time() {
+        if (!this.__time) {
+          this.__time = performance.now();
+          return 0;
+        }
+        let time = performance.now() - this.__time;
+        if (time < 1000) return (Math.round(time * 100) / 100) + ' ms';
+        else return (Math.round(time * 100) / 100000) + ' s';
+      }
+
+      /**
+       * Fired after the first paint.
+       * @event first-paint
+       */
+    }
+    customElements.define(PolymerUtilsBaseDemo.is, PolymerUtilsBaseDemo);
+  </script>
+</dom-module>

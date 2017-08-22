@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>PolymerUtils demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="polymer-utils-base-demo.html">
+    <link rel="import" href="polymer-utils-demo.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <demo-snippet>
+        <dom-bind id="scope">
+          <template>
+            <polymer-utils-base-demo id="base" on-first-paint="_onFirstPaint"></polymer-utils-base-demo>
+            <script>
+              let scope = document.getElementById('scope');
+              scope._onFirstPaint = e => {
+                scope.$.base.log('_onFirstPaint', 'parent event handler');
+              };
+            </script>
+          </template>
+        </dom-bind>
+      </demo-snippet>
+      <demo-snippet>
+        <template>
+          <polymer-utils-demo></polymer-utils-demo>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>
