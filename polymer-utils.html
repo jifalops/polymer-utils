@@ -8,7 +8,6 @@
    */
   class PolymerUtils {
     constructor() {
-      super();
       console.warn('PolymerUtils is a utility class not meant to be instantiated.');
     }
 
@@ -22,10 +21,10 @@
      * @return {Function} To cancel the scheduled function.
      */
     static timeout(fn, delay) {
-      let async = delay === undefined
-        ? Polymer.Async.timeout
-        : Polymer.Async.timeout.after(delay);
-      return async.cancel.bind(async.run(fn));
+      let runnable = delay === undefined
+        ? Polymer.Async.timeOut
+        : Polymer.Async.timeOut.after(delay);
+      return runnable.cancel.bind(runnable.run(fn));
     }
     /**
      * Run a function at `requestAnimationFrame` timing (before the next paint).
@@ -43,27 +42,27 @@
     static animationFrameAfter(fn) {
       var timeoutHandle;
       let renderHandle = Polymer.Async.animationFrame.run(function() {
-        timeoutHandle = Polymer.Async.timeout.run(fn);
+        timeoutHandle = Polymer.Async.timeOut.run(fn);
       });
       return function() {
         Polymer.Async.animationFrame.cancel(renderHandle);
-        timeoutHandle && Polymer.Async.timeout.cancel(timeoutHandle);
+        timeoutHandle && Polymer.Async.timeOut.cancel(timeoutHandle);
       };
     }
     /**
       * Run a function at `requestIdleCallback` timing, or
-      * falls back to settimeout 16ms if not supported.
+      * falls back to setTimeout 16ms if not supported.
       * @return {Function} To cancel the scheduled function.
       */
     static idlePeriod(fn) {
       return Polymer.Async.idlePeriod.cancel.bind(Polymer.Async.idlePeriod.run(fn));
     }
     /**
-      * Run a function at microtask timing (before the next task).
+      * Run a function at microTask timing (before the next task).
       * @return {Function} To cancel the scheduled function.
       */
-    static microtask(fn) {
-      return Polymer.Async.microtask.cancel.bind(Polymer.Async.microtask.run(fn));
+    static microTask(fn) {
+      return Polymer.Async.microTask.cancel.bind(Polymer.Async.microTask.run(fn));
     }
     /**
      * Convenience method for `Polymer.RenderStatus.beforeNextRender`. Not cancelable.
@@ -91,7 +90,7 @@
      */
     static debounce(debouncer, delay, callback) {
       return Polymer.Debouncer.debounce(debouncer,
-        delay > 0 ? Polymer.Async.timeOut.after(delay) : Polymer.Async.timeout,
+        delay > 0 ? Polymer.Async.timeOut.after(delay) : Polymer.Async.timeOut,
         callback
       );
     }
@@ -102,7 +101,7 @@
     static debounceUntilRender(debouncer, callback) {
       return Polymer.Debouncer.debounce(debouncer,
         Polymer.Async.animationFrame,
-        settimeout.bind(callback)
+        function() { setTimeout(callback) }
       );
     }
     /**
@@ -113,11 +112,11 @@
       return Polymer.Debouncer.debounce(debouncer, Polymer.Async.idlePeriod, callback);
     }
     /**
-     * Debounce a function at microtask timing, using a MutationObserver queue.
+     * Debounce a function at microTask timing, using a MutationObserver queue.
      * @return The `debouncer` passed as an argument, creating one if necessary.
      */
-    static debounceMicrotask(debouncer, callback) {
-      return Polymer.Debouncer.debounce(debouncer, Polymer.Async.microtask, callback);
+    static debounceMicroTask(debouncer, callback) {
+      return Polymer.Debouncer.debounce(debouncer, Polymer.Async.microTask, callback);
     }
   }
 </script>

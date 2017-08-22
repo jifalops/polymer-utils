@@ -7,7 +7,7 @@
         display: block;
       }
     </style>
-
+    <div>[[_if(someprop, 'yes', 'no')]]</div>
   </template>
 
   <script>
@@ -39,19 +39,16 @@
         super._removeListeners();
         // window.removeEventListener('eventname', this.someFunction.bind(this));
       }
-      
+
       _afterFirstPaint() {
         super._afterFirstPaint();
         // _addListeners() just ran.
+        this.fire('first-paint'); // Polymer 1.x `fire(name, data, options)`
       }
-      
-      // _if(cond, t, f) is available for bindings.
-      // _fire(name, data, options) is available and works like Polymer 1.x's this.fire()
-      
-      
+
       /**
-       * Fired when
-       * @event name
+       * Fired after the first paint.
+       * @event first-paint
        * @param {type} name Description
        */
     }

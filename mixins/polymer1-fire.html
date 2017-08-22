@@ -2,10 +2,10 @@
   /**
    * Mixin for the Polymer 1.x `fire` instance function.
    */
-  CustomEvents = function(superClass) {
+  Polymer1Fire = function(superClass) {
     return class extends superClass {
       /** Copy the Polymer 1.x fire implementation. */
-      _fire(name, data, options = {}) {
+      fire(name, data, options = {}) {
         options.detail = data;
         if (options.bubbles === undefined) options.bubbles = true;
         if (options.composed === undefined) options.composed = true;

@@ -21,30 +21,37 @@
       }
       /**
        * Called after the first paint whenever the element is attached/connected
-       * to the DOM. If an `_addListeners` method is defined, it will be called.
+       * to the DOM.
        *
        * If only adding listeners, simply implement the `_addListeners` and
        * `_removeListeners` methods, for more after-paint operations, override
        * this method and call super().
        */
       _afterFirstPaint() {
-        if (this._listenersAdded()) {
+        if (this.__listenersAdded) {
           console.warn('Adding listeners before first paint can impact user experience. ')
         } else {
           this._addListeners();
         }
       }
+      /**
+       * Called from `_afterFirstPaint`.
+       * Use this for calls to `window.addEventListener`.
+       */
       _addListeners() {
         this.__listenersAdded = true;
-        // this._boundListener = this.someFunction.bind(this);
-        // this._boundListener = () => {}
-        // window.addEventListener('eventname', this._boundListener);
       }
+      /**
+       * Called from `disconnectedCallback`.
+       * Use this for calls to `window.removeEventListener`.
+       */
       _removeListeners() {
         this.__listenersAdded = false;
-        // window.removeEventListener('eventname', this._boundListener);
       }
-      _listenersAdded() {
+      /**
+       * Getter to check if listeners are currently added.
+       */
+      get _listenersAdded() {
         return this.__listenersAdded;
       }
     }
