@@ -22,6 +22,6 @@
     "web-component-tester": "^6.0.0",
     "webcomponentsjs": "^1.0.0",
     "iron-flex-layout": "iron-flex-layout#^2.0.0",
-    "shadycss": "shadycss#^2.0.0"
+    "shadycss": "shadycss#^1.0.0"
   }
 }
