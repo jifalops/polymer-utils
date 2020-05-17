@@ -24,12 +24,10 @@ Extend `PolymerUtilsBase` or use the `PolymerUtils.*` async and debounce methods
 ```
 <custom-element-demo>
   <dom-bind>
-    <template is="dom-bind">
-      <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-      <link rel="import" href="demo/polymer-utils-demo.html">
-      <link rel="import" href="demo/polymer-utils-base-demo.html">
-      <next-code-block></next-code-block>
-    </template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="demo/polymer-utils-demo.html">
+    <link rel="import" href="demo/polymer-utils-base-demo.html">
+    <next-code-block></next-code-block>
   </dom-bind>
 </custom-element-demo>
 ```
